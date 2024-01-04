@@ -2,14 +2,34 @@
 using System;
 
 
-Keyboard keyboard = new Keyboard();
+Keyboard bestKeyboard = new Keyboard();
 
-Scanner scanner = new Scanner("input.txt");
 
-int penalty = 0;
+Scanner scanner = new Scanner("E:\\dev\\EvoType\\input.txt");
 
-foreach (char c in scanner.GetKeys())
+double bestPenalty = 1e9;
+
+for (int i = 0; i < 1000; i++)
 {
-	Console.WriteLine(keyboard.GetCostOfKey(c));
+
+	double penalty = 0;
+
+	Keyboard keyboard = new Keyboard();
+	keyboard.RandomizeKeySet();
+
+	foreach (char c in scanner.GetKeys())
+	{
+		penalty += keyboard.GetCostOfKey(c);
+	}
+
+	if (penalty < bestPenalty)
+	{
+		bestPenalty = penalty;
+		bestKeyboard = keyboard;
+	}
 }
+
+
+Console.WriteLine($"{bestPenalty}");
+Console.WriteLine(bestKeyboard.PrintKeySet()); 
 

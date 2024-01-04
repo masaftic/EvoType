@@ -1,4 +1,6 @@
-﻿namespace EvoType;
+﻿using System.Text;
+
+namespace EvoType;
 
 public class Keyboard
 {
@@ -79,6 +81,11 @@ public class Keyboard
 		return allKeys.OrderBy(x => Random.Shared.Next()).ToArray();
 	}
 
+	public void RandomizeKeySet()
+	{
+		keySet = RandomKeySet();
+	}
+
 	public double GetCostOfKey(char key)
 	{
 		key = Scanner.Normalize(key);
@@ -92,6 +99,24 @@ public class Keyboard
 			return keyCostTable[keyIndex] = CalcDifference(CalcPos(keyIndex), CalcPos(HomeRowKeyIndex));
 		}
 		throw new Exception($"Unknown Character: {key}.");
+	}
+
+	public string PrintKeySet()
+	{
+		string[] keyString = new string[3];
+		for (int i = 0; i < 3; i++)
+		{
+			StringBuilder row = new();
+			for (int j = 0; j < rowSize[i]; j++)
+			{
+				row.Append(keySet[i * rowSize[i] + j]);
+			}
+			string sep = "";
+			if (i == 1) sep = " ";
+			if (i == 2) sep = "  ";
+			keyString[i] = sep + string.Join(" ", row.ToString().ToCharArray());
+		}
+		return string.Join('\n', keyString);
 	}
 
 	private (int x, int y) CalcPos(int index)
@@ -110,9 +135,9 @@ public class Keyboard
 
 	private int FindKeyIndex(char key)
 	{
-		for (int i = 0; i < allKeys.Length; i++)
+		for (int i = 0; i < keySet.Length; i++)
 		{
-			if (key == allKeys[i]) return i;
+			if (key == keySet[i]) return i;
 		}
 		throw new Exception($"Unknown Charachter: {key}.");
 	}
