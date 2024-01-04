@@ -14,15 +14,19 @@ class Scanner
 	public Scanner(string path)
 	{
 		source = File.ReadAllText(path)[..limit];
+		source = "q";
 	}
 
-	public IEnumerable<char> GetKeys()
+	public char[] GetKeys()
 	{
+		List<char> chars = new();
+
 		foreach (char c in source)
 		{
-			if (char.IsWhiteSpace(c) || (!Keyboard.allKeys.Contains(c))) continue;
-			yield return Normalize(c);
+			if (char.IsWhiteSpace(c) || (!Keyboard.allKeys.Contains(c)) || c == '\0') continue;
+			chars.Add(c);
 		}
+		return chars.ToArray();
 	}
 
 	public static char Normalize(char c)

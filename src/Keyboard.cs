@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Diagnostics;
+using System.Text;
 
 namespace EvoType;
 
@@ -7,7 +8,7 @@ public class Keyboard
 	const int keyboardSize = 33;
 	public static readonly char[] allKeys = ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', '\'', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '?'];
 
-	public char[] keySet = allKeys;
+	public char[] keySet = new char[allKeys.Length];
 
 
 
@@ -69,6 +70,10 @@ public class Keyboard
 	public Keyboard()
 	{
 		for (int i = 0; i < keyboardSize; i++) keyCostTable[i] = -1;
+		for (int i = 0; i < keySet.Length; i++)
+		{
+			keySet[i] = allKeys[i];
+		}
 	}
 
 	public Keyboard(char[] keySet) : this()
@@ -76,9 +81,21 @@ public class Keyboard
 		this.keySet = keySet;
 	}
 
-	public static char[] RandomKeySet()
+	public char[] RandomKeySet()
 	{
-		return allKeys.OrderBy(x => Random.Shared.Next()).ToArray();
+		char[] randomKeySet = new char[allKeys.Length];
+		for (int i = 0; i < randomKeySet.Length; i++)
+		{
+			randomKeySet[i] = allKeys[i];
+		}
+
+		for (int i = 1; i < randomKeySet.Length; i++)
+		{
+			int randomIndex = Random.Shared.Next(0, i);
+			(randomKeySet[randomIndex], randomKeySet[i]) = (randomKeySet[i], randomKeySet[randomIndex]);
+		}
+		// Debug.Assert(ValidKeySet());
+		return randomKeySet;
 	}
 
 	public void RandomizeKeySet()
@@ -86,7 +103,7 @@ public class Keyboard
 		keySet = RandomKeySet();
 	}
 
-	public double EvaluatePenalty(IEnumerable<char> chars)
+	public double EvaluatePenalty(char[] chars)
 	{
 		double penalty = 0;
 		foreach (char c in chars)
@@ -99,7 +116,7 @@ public class Keyboard
 	public double GetCostOfKey(char key)
 	{
 		key = Scanner.Normalize(key);
-		if (HomeRowKeys.TryGetValue(FindKeyIndex(key), out var HomeRowKeyIndex))
+		if (HomeRowKeys.TryGetValue(FindHomeKeyIndex(key), out var HomeRowKeyIndex))
 		{
 			int keyIndex = FindKeyIndex(key);
 			if (keyCostTable[keyIndex] != -1)
@@ -114,19 +131,31 @@ public class Keyboard
 	public override string ToString()
 	{
 		string[] keyString = new string[3];
+		int rowSizeSum = 0;
 		for (int i = 0; i < 3; i++)
 		{
 			StringBuilder row = new();
 			for (int j = 0; j < rowSize[i]; j++)
 			{
-				row.Append(keySet[i * rowSize[i] + j]);
+				row.Append(keySet[rowSizeSum + j]);
 			}
+			rowSizeSum += rowSize[i];
+			
 			string sep = "";
 			if (i == 1) sep = " ";
 			if (i == 2) sep = "  ";
 			keyString[i] = sep + string.Join(" ", row.ToString().ToCharArray());
 		}
 		return string.Join('\n', keyString);
+	}
+
+	private bool ValidKeySet()
+	{
+		foreach (char c in keySet)
+		{
+			if (!allKeys.Contains(c)) return false;
+		}
+		return true;
 	}
 
 	private (int x, int y) CalcPos(int index)
@@ -148,6 +177,15 @@ public class Keyboard
 		for (int i = 0; i < keySet.Length; i++)
 		{
 			if (key == keySet[i]) return i;
+		}
+		throw new Exception($"Unknown Charachter: {key}.");
+	}
+
+	private int FindHomeKeyIndex(char key)
+	{
+		for (int i = 0; i < allKeys.Length; i++)
+		{
+			if (key == allKeys[i]) return i;
 		}
 		throw new Exception($"Unknown Charachter: {key}.");
 	}
