@@ -4,23 +4,16 @@ using System;
 
 Keyboard bestKeyboard = new Keyboard();
 
-
 Scanner scanner = new Scanner("E:\\dev\\EvoType\\input.txt");
 
 double bestPenalty = 1e9;
 
-for (int i = 0; i < 1000; i++)
+for (int i = 0; i < 10000; i++)
 {
-
-	double penalty = 0;
-
 	Keyboard keyboard = new Keyboard();
 	keyboard.RandomizeKeySet();
 
-	foreach (char c in scanner.GetKeys())
-	{
-		penalty += keyboard.GetCostOfKey(c);
-	}
+	double penalty = keyboard.EvaluatePenalty(scanner.GetKeys());
 
 	if (penalty < bestPenalty)
 	{
@@ -29,7 +22,6 @@ for (int i = 0; i < 1000; i++)
 	}
 }
 
-
 Console.WriteLine($"{bestPenalty}");
-Console.WriteLine(bestKeyboard.PrintKeySet()); 
+Console.WriteLine(bestKeyboard); 
 

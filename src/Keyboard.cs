@@ -5,7 +5,7 @@ namespace EvoType;
 public class Keyboard
 {
 	const int keyboardSize = 33;
-	public static readonly char[] allKeys = ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', '\'', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/'];
+	public static readonly char[] allKeys = ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', '\'', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '?'];
 
 	public char[] keySet = allKeys;
 
@@ -86,6 +86,16 @@ public class Keyboard
 		keySet = RandomKeySet();
 	}
 
+	public double EvaluatePenalty(IEnumerable<char> chars)
+	{
+		double penalty = 0;
+		foreach (char c in chars)
+		{
+			penalty += GetCostOfKey(c);
+		}
+		return penalty;
+	}
+
 	public double GetCostOfKey(char key)
 	{
 		key = Scanner.Normalize(key);
@@ -101,7 +111,7 @@ public class Keyboard
 		throw new Exception($"Unknown Character: {key}.");
 	}
 
-	public string PrintKeySet()
+	public override string ToString()
 	{
 		string[] keyString = new string[3];
 		for (int i = 0; i < 3; i++)

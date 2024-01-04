@@ -48,9 +48,6 @@ class Scanner
 			case '>':
 				c = '.';
 				break;
-			case '?':
-				c = '/';
-				break;
 		}
 		return c;
 	}
