@@ -88,9 +88,11 @@ public class Keyboard
 			randomKeySet[i] = allKeys[i];
 		}
 
+		Random random = new Random();
+
 		for (int i = 1; i < randomKeySet.Length; i++)
 		{
-			int randomIndex = Random.Shared.Next(0, i);
+			int randomIndex = random.Next(0, i);
 			(randomKeySet[randomIndex], randomKeySet[i]) = (randomKeySet[i], randomKeySet[randomIndex]);
 		}
 		// Debug.Assert(ValidKeySet());

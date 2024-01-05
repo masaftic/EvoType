@@ -40,6 +40,32 @@ public class Population
         double fitnessesSum = fitnesses.Sum();
         probabilities = [.. fitnesses.AsParallel().Select(f => f / fitnessesSum)];
         probabilities.Print();
+        System.Console.WriteLine();
+    }
+
+
+    public void SelectNextGen()
+    {
+        double[] prefixProbs = new double[Size];
+        Array.Copy(probabilities, prefixProbs, Size);
+        for (int i = 1; i < Size; i++)
+        {
+            prefixProbs[i] += prefixProbs[i - 1];
+        }
+
+        Random random = new Random();
+
+        Keyboard[] newKeyboards = new Keyboard[Size];
+
+        for (int individual = 0; individual < Size; individual++)
+        {
+            double rouletteSpin = random.NextDouble() * prefixProbs[Size - 1];
+            int selectedIndex = Array.BinarySearch(prefixProbs, rouletteSpin);
+
+            newKeyboards[individual] = keyboards[~selectedIndex];
+        }
+
+        keyboards = newKeyboards;
     }
 
     

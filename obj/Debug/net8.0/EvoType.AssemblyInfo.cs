@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("EvoType")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7d86c72aea849565f23d26acafe165b3510dd231")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7f29b0217d955ad2638bafe7dabf1ad50bd80b72")]
 [assembly: System.Reflection.AssemblyProductAttribute("EvoType")]
 [assembly: System.Reflection.AssemblyTitleAttribute("EvoType")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
