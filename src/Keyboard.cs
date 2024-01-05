@@ -8,7 +8,7 @@ public class Keyboard
 	const int keyboardSize = 33;
 	public static readonly char[] allKeys = ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', '\'', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '?'];
 
-	public char[] keySet = new char[allKeys.Length];
+	public readonly char[] keySet = new char[allKeys.Length];
 
 
 	private double[] keyCostTable = new double[keyboardSize];
@@ -69,10 +69,7 @@ public class Keyboard
 	public Keyboard()
 	{
 		for (int i = 0; i < keyboardSize; i++) keyCostTable[i] = -1;
-		for (int i = 0; i < keySet.Length; i++)
-		{
-			keySet[i] = allKeys[i];
-		}
+		keySet = RandomKeySet();
 	}
 
 	public Keyboard(char[] keySet) : this()
@@ -80,7 +77,7 @@ public class Keyboard
 		this.keySet = keySet;
 	}
 
-	public char[] RandomKeySet()
+	public static char[] RandomKeySet()
 	{
 		char[] randomKeySet = new char[allKeys.Length];
 		for (int i = 0; i < randomKeySet.Length; i++)
@@ -97,11 +94,6 @@ public class Keyboard
 		}
 		// Debug.Assert(ValidKeySet());
 		return randomKeySet;
-	}
-
-	public void RandomizeKeySet()
-	{
-		keySet = RandomKeySet();
 	}
 
 	public double EvaluatePenalty(char[] chars)

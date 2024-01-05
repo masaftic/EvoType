@@ -25,14 +25,6 @@ public class Population
         keyboards = [.. keyboards.AsParallel().Select(x => new Keyboard())];
     }
 
-    public void RandomizePopulation()
-    {
-        keyboards = [.. keyboards.AsParallel().Select(x => {
-                x.RandomizeKeySet();
-                return x;
-            })];
-    }
-
     public void Evaluate()
     {
         penalties = [.. keyboards.AsParallel().Select(x => x.EvaluatePenalty(source))];
@@ -57,16 +49,17 @@ public class Population
 
         Keyboard[] newKeyboards = new Keyboard[Size];
 
-        for (int individual = 0; individual < Size; individual++)
-        {
+        keyboards = [.. newKeyboards.AsParallel().Select(x => {
             double rouletteSpin = random.NextDouble() * prefixProbs[Size - 1];
             int selectedIndex = Array.BinarySearch(prefixProbs, rouletteSpin);
-
-            newKeyboards[individual] = keyboards[~selectedIndex];
-        }
-
-        keyboards = newKeyboards;
+            if (selectedIndex < 0) selectedIndex = ~selectedIndex;
+            return keyboards[selectedIndex];
+        })];
     }
 
+    public void Crossover()
+    {
+        
+    }
     
 }
