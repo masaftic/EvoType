@@ -1,29 +1,15 @@
 ﻿using EvoType;
+using EvoType.src;
 using System;
 
 
-Keyboard bestKeyboard = new Keyboard();
-
+Keyboard Keyboard = new Keyboard();
 
 Scanner scanner = new Scanner("E:\\dev\\EvoType\\input.txt");
 
-double bestPenalty = 1e9;
+System.Console.WriteLine(Keyboard.EvaluatePenalty(scanner.GetKeys()));
+System.Console.WriteLine(Keyboard);
 
-for (int i = 0; i < 10000; i++)
-{
-	Keyboard keyboard = new Keyboard();
-	keyboard.RandomizeKeySet();
-
-	double penalty = keyboard.EvaluatePenalty(scanner.GetKeys());
-
-
-	if (penalty < bestPenalty)
-	{
-		bestPenalty = penalty;
-		bestKeyboard = keyboard;
-	}
-}
-
-Console.WriteLine($"{bestPenalty}");
-Console.WriteLine(bestKeyboard); 
-
+Population population = new Population(4, scanner.GetKeys());
+population.RandomizePopulation();
+population.Evaluate();

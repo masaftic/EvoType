@@ -14,7 +14,6 @@ class Scanner
 	public Scanner(string path)
 	{
 		source = File.ReadAllText(path)[..limit];
-		source = "q";
 	}
 
 	public char[] GetKeys()

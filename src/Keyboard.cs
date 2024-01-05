@@ -11,7 +11,6 @@ public class Keyboard
 	public char[] keySet = new char[allKeys.Length];
 
 
-
 	private double[] keyCostTable = new double[keyboardSize];
 	public static readonly double keySize = 19.05;
 	public static readonly int[] rowSize = [12, 11, 10];
