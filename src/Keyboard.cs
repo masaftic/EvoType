@@ -5,11 +5,10 @@ namespace EvoType;
 
 public class Keyboard
 {
-	const int keyboardSize = 33;
+	public const int keyboardSize = 33;
 	public static readonly char[] allKeys = ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', '\'', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '?'];
 
-	public readonly char[] keySet = new char[allKeys.Length];
-
+	public char[] KeySet { get; private set; } = new char[allKeys.Length];
 
 	private double[] keyCostTable = new double[keyboardSize];
 	public static readonly double keySize = 19.05;
@@ -69,12 +68,12 @@ public class Keyboard
 	public Keyboard()
 	{
 		for (int i = 0; i < keyboardSize; i++) keyCostTable[i] = -1;
-		keySet = RandomKeySet();
+		Array.Copy(allKeys, KeySet, keyboardSize);
 	}
 
-	public Keyboard(char[] keySet) : this()
+	public void RandomizeKeySet()
 	{
-		this.keySet = keySet;
+		KeySet = RandomKeySet();
 	}
 
 	public static char[] RandomKeySet()
@@ -130,10 +129,10 @@ public class Keyboard
 			StringBuilder row = new();
 			for (int j = 0; j < rowSize[i]; j++)
 			{
-				row.Append(keySet[rowSizeSum + j]);
+				row.Append(KeySet[rowSizeSum + j]);
 			}
 			rowSizeSum += rowSize[i];
-			
+
 			string sep = "";
 			if (i == 1) sep = " ";
 			if (i == 2) sep = "  ";
@@ -142,11 +141,15 @@ public class Keyboard
 		return string.Join('\n', keyString);
 	}
 
-	private bool ValidKeySet()
+	public bool ValidKeySet()
 	{
-		foreach (char c in keySet)
+		foreach (char c in allKeys)
 		{
-			if (!allKeys.Contains(c)) return false;
+			if (!KeySet.Contains(c))
+			{
+				Console.WriteLine($"char '{c}' does not exist.");
+				return false;
+			}
 		}
 		return true;
 	}
@@ -167,14 +170,14 @@ public class Keyboard
 
 	private int FindKeyIndex(char key)
 	{
-		for (int i = 0; i < keySet.Length; i++)
+		for (int i = 0; i < KeySet.Length; i++)
 		{
-			if (key == keySet[i]) return i;
+			if (key == KeySet[i]) return i;
 		}
 		throw new Exception($"Unknown Charachter: {key}.");
 	}
 
-	private int FindHomeKeyIndex(char key)
+	private static int FindHomeKeyIndex(char key)
 	{
 		for (int i = 0; i < allKeys.Length; i++)
 		{
@@ -183,7 +186,7 @@ public class Keyboard
 		throw new Exception($"Unknown Charachter: {key}.");
 	}
 
-	private double CalcDifference((int x, int y) first, (int x, int y) second)
+	private static double CalcDifference((int x, int y) first, (int x, int y) second)
 	{
 		(double x, double y) firstPos = first, secondPos = second;
 		firstPos.x *= keySize;

@@ -1,0 +1,14 @@
+F:\Computer_Science\AI\2023\Lecture3\EvoType\bin\Debug\net8.0\EvoType.exe
+F:\Computer_Science\AI\2023\Lecture3\EvoType\bin\Debug\net8.0\EvoType.deps.json
+F:\Computer_Science\AI\2023\Lecture3\EvoType\bin\Debug\net8.0\EvoType.runtimeconfig.json
+F:\Computer_Science\AI\2023\Lecture3\EvoType\bin\Debug\net8.0\EvoType.dll
+F:\Computer_Science\AI\2023\Lecture3\EvoType\bin\Debug\net8.0\EvoType.pdb
+F:\Computer_Science\AI\2023\Lecture3\EvoType\obj\Debug\net8.0\EvoType.GeneratedMSBuildEditorConfig.editorconfig
+F:\Computer_Science\AI\2023\Lecture3\EvoType\obj\Debug\net8.0\EvoType.AssemblyInfoInputs.cache
+F:\Computer_Science\AI\2023\Lecture3\EvoType\obj\Debug\net8.0\EvoType.AssemblyInfo.cs
+F:\Computer_Science\AI\2023\Lecture3\EvoType\obj\Debug\net8.0\EvoType.csproj.CoreCompileInputs.cache
+F:\Computer_Science\AI\2023\Lecture3\EvoType\obj\Debug\net8.0\EvoType.dll
+F:\Computer_Science\AI\2023\Lecture3\EvoType\obj\Debug\net8.0\refint\EvoType.dll
+F:\Computer_Science\AI\2023\Lecture3\EvoType\obj\Debug\net8.0\EvoType.pdb
+F:\Computer_Science\AI\2023\Lecture3\EvoType\obj\Debug\net8.0\EvoType.genruntimeconfig.cache
+F:\Computer_Science\AI\2023\Lecture3\EvoType\obj\Debug\net8.0\ref\EvoType.dll

@@ -13,9 +13,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\dev\\EvoType\\New folder.csproj",
-      "projectName": "New folder",
-      "projectPath": "E:\\dev\\EvoType\\New folder.csproj",
+      "projectUniqueName": "E:\\dev\\EvoType\\EvoType.csproj",
+      "projectName": "EvoType",
+      "projectPath": "E:\\dev\\EvoType\\EvoType.csproj",
       "packagesPath": "C:\\Users\\youse\\.nuget\\packages\\",
       "outputPath": "E:\\dev\\EvoType\\obj\\",
       "projectStyle": "PackageReference",

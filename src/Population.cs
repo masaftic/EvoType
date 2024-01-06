@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -8,7 +9,7 @@ public class Population
 {
     public int Size { get; private set; }
     readonly char[] source;
-    Keyboard[] keyboards;
+    public Keyboard[] Keyboards { get; private set; }
     double[] penalties;
     double[] fitnesses;
     double[] probabilities;
@@ -17,17 +18,17 @@ public class Population
     {
         this.source = source;
         Size = size;
-        penalties     = new double[size];
-        fitnesses     = new double[size];
+        penalties = new double[size];
+        fitnesses = new double[size];
         probabilities = new double[size];
 
-        keyboards = new Keyboard[size];
-        keyboards = [.. keyboards.AsParallel().Select(x => new Keyboard())];
+        Keyboards = new Keyboard[size];
+        Keyboards = [.. Keyboards.AsParallel().Select(x => new Keyboard())];
     }
 
     public void Evaluate()
     {
-        penalties = [.. keyboards.AsParallel().Select(x => x.EvaluatePenalty(source))];
+        penalties = [.. Keyboards.AsParallel().Select(x => x.EvaluatePenalty(source))];
         fitnesses = [.. penalties.AsParallel().Select(x => 1.0 / (1 + x))];
         double fitnessesSum = fitnesses.Sum();
         probabilities = [.. fitnesses.AsParallel().Select(f => f / fitnessesSum)];
@@ -49,17 +50,59 @@ public class Population
 
         Keyboard[] newKeyboards = new Keyboard[Size];
 
-        keyboards = [.. newKeyboards.AsParallel().Select(x => {
+        Keyboards = [.. newKeyboards.AsParallel().Select(x => {
             double rouletteSpin = random.NextDouble() * prefixProbs[Size - 1];
             int selectedIndex = Array.BinarySearch(prefixProbs, rouletteSpin);
             if (selectedIndex < 0) selectedIndex = ~selectedIndex;
-            return keyboards[selectedIndex];
+            return Keyboards[selectedIndex];
         })];
     }
 
-    public void Crossover()
+    public static (Keyboard, Keyboard) Crossover(Keyboard par1, Keyboard par2)
     {
-        
+
+        Random random = new Random();
+
+        int left = random.Next() % Keyboard.keyboardSize;
+        int right = random.Next() % Keyboard.keyboardSize;
+
+        if (left > right) (left, right) = (right, left);
+
+        Keyboard Cross(Keyboard par1, Keyboard par2)
+        {
+            Keyboard child = new();
+
+            bool[] visited = new bool[256];
+            for (int i = left; i < right; i++)
+            {
+                child.KeySet[i] = par1.KeySet[i];
+                visited[child.KeySet[i]] = true;
+            }
+
+            for (int i = right, j = right; ;)
+            {
+                if (i == left) break;
+                if (visited[par2.KeySet[j]])
+                {
+                    j = (j + 1) % Keyboard.keyboardSize;
+                    continue;
+                }
+
+                child.KeySet[i] = par2.KeySet[j];
+                visited[par2.KeySet[j]] = true;
+
+                i = (i + 1) % Keyboard.keyboardSize;
+                j = (j + 1) % Keyboard.keyboardSize;
+            }
+
+            if (!child.ValidKeySet())
+            {
+                throw new Exception("CrossOver Failed");
+            }
+            return child;
+        }
+
+        return (Cross(par1, par2), Cross(par2, par1));
     }
-    
+
 }
