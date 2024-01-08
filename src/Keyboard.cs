@@ -8,7 +8,7 @@ public class Keyboard
 	public const int keyboardSize = 33;
 	public static readonly char[] allKeys = ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', '\'', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '?'];
 
-	public char[] KeySet { get; private set; } = new char[allKeys.Length];
+	public char[] KeySet { get; private set; } = new char[keyboardSize];
 
 	private double[] keyCostTable = new double[keyboardSize];
 	public static readonly double keySize = 19.05;
@@ -78,7 +78,7 @@ public class Keyboard
 
 	public static char[] RandomKeySet()
 	{
-		char[] randomKeySet = new char[allKeys.Length];
+		char[] randomKeySet = new char[keyboardSize];
 		for (int i = 0; i < randomKeySet.Length; i++)
 		{
 			randomKeySet[i] = allKeys[i];
@@ -118,6 +118,17 @@ public class Keyboard
 			return keyCostTable[keyIndex] = CalcDifference(CalcPos(keyIndex), CalcPos(HomeRowKeyIndex));
 		}
 		throw new Exception($"Unknown Character: {key}.");
+	}
+
+	public void Mutate()
+	{
+		Random random = new();
+		for (int i = 0; i < random.Next(4); i++)
+		{
+			int left = random.Next(Keyboard.keyboardSize);
+			int right = random.Next(Keyboard.keyboardSize);
+			(KeySet[left], KeySet[right]) = (KeySet[right], KeySet[left]);
+		}
 	}
 
 	public override string ToString()

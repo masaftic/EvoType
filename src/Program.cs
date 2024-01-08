@@ -3,25 +3,36 @@ using EvoType.src;
 using System;
 
 
-Keyboard Keyboard = new Keyboard();
 
 Scanner scanner = new Scanner("E:\\dev\\EvoType\\input.txt");
 
-System.Console.WriteLine(Keyboard.EvaluatePenalty(scanner.GetKeys()));
-System.Console.WriteLine(Keyboard);
+int size = 50;
 
-System.Console.WriteLine();
-System.Console.WriteLine(string.Join(" ", Keyboard.allKeys));
+Population population = new Population(size, scanner.GetKeys());
+population.Randomize();
 
-Population population = new Population(2, scanner.GetKeys());
+for (int i = 0; i < size; i++)
+{
+    population.Evaluate();
 
-Array.Reverse(population.Keyboards[1].KeySet);
+    population.SelectNextGen();
+
+    Random random = new Random();
+    for (int j = 0; j < (int)(Population.crossOverRate * size); j++)
+    {
+        int ind1 = random.Next(population.Size);
+        int ind2 = random.Next(population.Size);
+        (population.Individuals[ind2].Keyboard, population.Individuals[ind1].Keyboard) = Population.Crossover(
+         population.Individuals[ind1].Keyboard, population.Individuals[ind2].Keyboard);
+    }
+
+    for (int j = 0; j < size; j++)
+    {
+        population.Individuals[i].Keyboard.Mutate();
+    }
+}
 
 
-(Keyboard k1, Keyboard k2) = Population.Crossover(population.Keyboards[0], population.Keyboards[1]);
+population.Individuals.OrderBy(x => x.Fitness);
 
-
-System.Console.WriteLine();
-System.Console.WriteLine(string.Join(" ", k1.KeySet));
-System.Console.WriteLine();
-System.Console.WriteLine(string.Join(" ", k2.KeySet));
+Console.WriteLine($"{population.Individuals[size - 1].Keyboard} \n {population.Individuals[size - 1].Penalty}");
